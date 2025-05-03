@@ -1,4 +1,11 @@
-const Profile = ({ name, src, age = 12, address, handleAlertName }) => {
+const Profile = ({
+  name,
+  src,
+  age = 12,
+  address,
+  handleAlertName,
+  children,
+}) => {
   function alert_() {
     alert("Hello student full stack");
   }
@@ -12,6 +19,7 @@ const Profile = ({ name, src, age = 12, address, handleAlertName }) => {
         className="w-[200px] h-[200px] object-cover border-[3px]"
         src={src}
       />
+      {children}
     </div>
   );
 };
