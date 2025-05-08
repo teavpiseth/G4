@@ -1,0 +1,19 @@
+.title {
+  display: flex;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+.wrap {
+  width: 500px;
+  margin: auto;
+}
+
+.listTodo {
+  background: #eceef0;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  padding: 8px;
+  text-align: left;
+}

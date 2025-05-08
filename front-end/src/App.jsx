@@ -5,6 +5,7 @@ import Greeting from "./lesson/ui/condition-render/Greeting";
 import ProgressBar from "./lesson/adding-interactivity/state-as-snapshot/progress-bar/ProgressBar";
 import StateArray from "./lesson/adding-interactivity/state-array/StateArray";
 import ComponentMemory from "./lesson/adding-interactivity/component-memory";
+import TodoList from "./lesson/todo-list/TodoList";
 const profile = [
   {
     name: "Srey",
@@ -65,8 +66,9 @@ function App() {
   }
   return (
     <>
+      <TodoList />
       {/* <ComponentMemory /> */}
-      <StateArray />
+      {/* <StateArray /> */}
       {/* <Greeting name={"sovannet"} />
       <div className="flex">
         {profile.map((pro, i) => (
