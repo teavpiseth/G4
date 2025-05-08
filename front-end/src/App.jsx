@@ -3,7 +3,8 @@ import Profile from "./lesson/Profile";
 import Gallary from "./lesson/Gallary";
 import Greeting from "./lesson/ui/condition-render/Greeting";
 import ProgressBar from "./lesson/adding-interactivity/state-as-snapshot/progress-bar/ProgressBar";
-
+import StateArray from "./lesson/adding-interactivity/state-array/StateArray";
+import ComponentMemory from "./lesson/adding-interactivity/component-memory";
 const profile = [
   {
     name: "Srey",
@@ -64,6 +65,8 @@ function App() {
   }
   return (
     <>
+      {/* <ComponentMemory /> */}
+      <StateArray />
       {/* <Greeting name={"sovannet"} />
       <div className="flex">
         {profile.map((pro, i) => (
@@ -83,7 +86,7 @@ function App() {
         <Greeting name={"sovannet"} />
       </div> */}
 
-      <ProgressBar/>
+      {/* <ProgressBar/> */}
     </>
   );
 }

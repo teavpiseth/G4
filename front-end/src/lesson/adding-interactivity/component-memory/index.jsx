@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { sculptureList } from "./data";
-import Greeting from "../condition-render/Greeting";
+import Greeting from "../../ui/condition-render/Greeting";
 export default function Gallery() {
   //   let index = 0;
   const [index, setIndex] = useState(0);
