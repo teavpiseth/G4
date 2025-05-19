@@ -6,6 +6,7 @@ import ProgressBar from "./lesson/adding-interactivity/state-as-snapshot/progres
 import StateArray from "./lesson/adding-interactivity/state-array/StateArray";
 import ComponentMemory from "./lesson/adding-interactivity/component-memory";
 import TodoList from "./lesson/todo-list/TodoList";
+import Hook from "./lesson/hook/Hook";
 const profile = [
   {
     name: "Srey",
@@ -66,7 +67,8 @@ function App() {
   }
   return (
     <>
-      <TodoList />
+      <Hook />
+      {/* <TodoList /> */}
       {/* <ComponentMemory /> */}
       {/* <StateArray /> */}
       {/* <Greeting name={"sovannet"} />
