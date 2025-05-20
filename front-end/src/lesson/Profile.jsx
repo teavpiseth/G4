@@ -5,6 +5,7 @@ const Profile = ({
   address,
   handleAlertName,
   children,
+  width = 100,
 }) => {
   function alert_() {
     alert("Hello student full stack");
@@ -15,10 +16,7 @@ const Profile = ({
       <p className="bg-[#20972f] text-[white]">
         Name: {name}, age : {age}, street: {address.street}
       </p>
-      <img
-        className="w-[200px] h-[200px] object-cover border-[3px]"
-        src={src}
-      />
+      <img width={width} className=" object-cover border-[3px]" src={src} />
       {children}
     </div>
   );
