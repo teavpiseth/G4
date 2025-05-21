@@ -11,6 +11,7 @@ import {
   Col,
 } from "antd";
 import { ShoppingOutlined, UserOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -38,14 +39,17 @@ const HeaderComponent = () => {
             style={{ border: "none" }}
           >
             <Menu.Item key="home" style={{ color: "#6A5ACD" }}>
-              Home
+              <Link to="/">Home</Link>
             </Menu.Item>
-            <Menu.Item key="shop">Shop All</Menu.Item>
-            <Menu.Item key="phones">Mobile Phones</Menu.Item>
-            <Menu.Item key="tablets">Tablets</Menu.Item>
-            <Menu.Item key="accessories">Accessories</Menu.Item>
-            <Menu.Item key="about">About</Menu.Item>
-            <Menu.Item key="contact">Contact Us</Menu.Item>
+            <Menu.Item key="about">
+              <Link to="/about">About</Link>
+            </Menu.Item>
+            <Menu.Item key="contact">
+              <Link to="/contact">Contact</Link>
+            </Menu.Item>
+            <Menu.Item key="profile">
+              <Link to="/profile">Profile</Link>
+            </Menu.Item>
           </Menu>
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
