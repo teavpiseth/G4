@@ -1,24 +1,33 @@
-const sum = require("./sum");
+const http = require("http");
 
-console.log(sum(3, 5)); // Output: 8
+const server = http.createServer((request, response) => {
+  if (request.url == "/") {
+    response.write("<html><head><title>Home</title></head>");
+    response.write(
+      `<body><form action="/message" method="post"><input type="text" name="message"><button type="submit">Submit</button></form></body>`
+    );
+    response.write("</html>");
+    response.end();
+  }
 
-(function () {
-  const name = "Badman";
-  console.log(name);
-})();
+  if (request.url === "/message" && request.method === "POST") {
+    let body = "";
 
-(function () {
-  const name = "Superman";
-  console.log(name);
-})();
+    request.on("data", (chunk) => {
+      //20mb
+      body += chunk.toString();
+    });
 
-// // server.js
-// const http = require("http");
+    request.on("end", () => {
+      const message = body.split("=")[1]; // decodeURIComponent() is safer
+      console.log("Received message:", message);
 
-// const server = http.createServer((req, res) => {
-//   res.end("Hello from Node.js!");
-// });
+      response.writeHead(200, { "Content-Type": "text/html" });
+      response.end(`<h1>User submitted: ${message}</h1>`);
+    });
+  }
+});
 
-// server.listen(3001, () => {
-//   console.log("Server running at http://localhost:3001");
-// });
+server.listen(3033, () => {
+  console.log("Server is running on port 3033");
+});
