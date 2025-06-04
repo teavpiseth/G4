@@ -5,26 +5,25 @@ import axios from "axios";
 export default function Home() {
   const [dataPost, setDataPost] = React.useState([]);
 
+  async function fetchData() {
+    const res = await axios.get("http://localhost:3033/api/list"); // 10 sec // 20 sec
+    setDataPost(res?.data?.rows);
+  }
+
+  const handleFetch = async () => {
+    await fetchData();
+  };
+
   useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => {
-        setDataPost(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching:", error);
-      });
-    // fetch("https://jsonplaceholder.typicode.com/posts")
-    //   .then((res) => res.json())
-    //   .then((data) => setDataPost(data))
-    //   .catch((err) => console.log("error", err));
+    handleFetch();
   }, []);
+
   return (
     <div>
       <Product />
-      <h1>Post</h1>
+      <h1 className="mb-5">Profile</h1>
       <Row gutter={[16, 24]} className="mb-5 text-left">
-        {dataPost?.splice(0, 10)?.map((post) => {
+        {dataPost?.map((post) => {
           return (
             <Col
               xs={24}
@@ -36,8 +35,11 @@ export default function Home() {
               key={post.id}
               span={6}
             >
-              <h4>{post.title}</h4>
-              <p>{post.body}</p>
+              <h3 className="font-bold font[14]">
+                {post.first_name + " " + post.last_name}
+              </h3>
+              <img src={post.image} />
+              <p>{post.email}</p>
             </Col>
           );
         })}
