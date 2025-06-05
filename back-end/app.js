@@ -2,9 +2,10 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const cors = require("cors");
-const { data } = require("./mock-data/data");
 const db = require("./database/db");
 const mysql = require("mysql2");
+const joi = require("joi");
+const bcrypt = require("bcrypt");
 
 app.use(cors());
 app.use(express.json()); // parse application/json
@@ -30,7 +31,37 @@ app.get("/api/employees", async (req, res) => {
 app.post("/api/employees", async (req, res) => {
   const { first_name, last_name, email, image, gender, dob, password } =
     req.body;
+  const schema = joi
+    .object({
+      first_name: joi.string().required(),
+      last_name: joi.string().required(),
+      email: joi.string().email().required().messages({
+        "string.empty": "Email is required",
+        "string.email": "Email must be a valid. Example: 4Bk5o@example.com",
+      }),
+      image: joi.string().required(),
+      gender: joi.string().required(),
+      dob: joi.date().required(),
+      password: joi.string().required(),
+    })
+    .unknown();
+
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const err = error.details.map((err) => {
+      return {
+        message: err.message,
+        field: err.context.label,
+      };
+    });
+    return res.status(400).json({
+      message: err,
+    });
+  }
+
   try {
+    console.log(req.body.password);
+    const _password = bcrypt.hashSync(req.body.password, 10);
     const [rows] = await db.query(
       `insert into employees (first_name, last_name, email, image, gender, dob, password) values ( ${mysql.escape(
         first_name
@@ -40,7 +71,7 @@ app.post("/api/employees", async (req, res) => {
     ${mysql.escape(image)},
     ${mysql.escape(gender)},
     ${mysql.escape(dob)},
-    ${mysql.escape(password)})`
+    ${mysql.escape(_password)})`
     );
     res.json({
       message: "insert success",
@@ -48,7 +79,6 @@ app.post("/api/employees", async (req, res) => {
       rows,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       message: "insert fail",
       rows: [],
@@ -59,6 +89,45 @@ app.post("/api/employees", async (req, res) => {
 app.put("/api/employees", async (req, res) => {
   const { first_name, last_name, email, image, gender, dob, password, id } =
     req.body;
+
+  const schema = joi
+    .object({
+      first_name: joi.string().required(),
+      last_name: joi.string().required(),
+      email: joi.string().email().required().messages({
+        "string.empty": "Email is required",
+        "string.email": "Email must be a valid. Example: 4Bk5o@example.com",
+      }),
+      image: joi.string().required(),
+      gender: joi.string().required(),
+      dob: joi.date().required(),
+      password: joi
+        .alternatives()
+        .try(joi.string(), joi.number())
+        .required()
+        .messages({
+          "alternatives.types": "Password must be a string or a number",
+          "any.required": "Password is required",
+        }),
+      id: joi.number().required(),
+    })
+    .unknown();
+
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const err = error.details.map((err) => {
+      return {
+        message: err.message,
+        field: err.context.label,
+      };
+    });
+    return res.status(400).json({
+      message: err,
+    });
+  }
+
+  const _password = await bcrypt.hash(String(req.body.password), 10);
+
   try {
     const sql = `UPDATE employees SET first_name = ${mysql.escape(
       first_name
@@ -67,7 +136,7 @@ app.put("/api/employees", async (req, res) => {
     )}, image = ${mysql.escape(image)}, gender = ${mysql.escape(
       gender
     )}, dob = ${mysql.escape(dob)}, password = ${mysql.escape(
-      password
+      _password
     )}   WHERE id = ${mysql.escape(id)}`;
     console.log(sql);
     const [data] = await db.query(sql);
@@ -86,6 +155,24 @@ app.put("/api/employees", async (req, res) => {
 });
 
 app.delete("/api/employees", async (req, res) => {
+  const schema = joi
+    .object({
+      id: joi.number().required(),
+    })
+    .unknown();
+
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const err = error.details.map((err) => {
+      return {
+        message: err.message,
+        field: err.context.label,
+      };
+    });
+    return res.status(400).json({
+      message: err,
+    });
+  }
   try {
     const [existData] = await db.query(
       `select * from employees where id = ${mysql.escape(req.body.id)}`
