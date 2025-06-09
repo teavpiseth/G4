@@ -60,7 +60,6 @@ app.post("/api/employees", async (req, res) => {
   }
 
   try {
-    console.log(req.body.password);
     const _password = bcrypt.hashSync(req.body.password, 10);
     const [rows] = await db.query(
       `insert into employees (first_name, last_name, email, image, gender, dob, password) values ( ${mysql.escape(
@@ -196,6 +195,137 @@ app.delete("/api/employees", async (req, res) => {
   } catch (err) {
     res.json({
       message: "delete fail",
+      status: 500,
+      data: [],
+    });
+  }
+});
+
+app.post("/api/product", async (req, res) => {
+  const schema = joi
+    .object({
+      name: joi.string().required(),
+      description: joi.string().required(),
+      qty: joi.number().required(),
+      price: joi.number().precision(2).required(),
+      discount_amount: joi.number().precision(2).required(),
+      discount_percent: joi.number().precision(2).required(),
+      net_price: joi.number().precision(2).required(),
+      status: joi.number().required(),
+      category_id: joi.number().required(),
+    })
+    .unknown();
+
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const err = error.details.map((err) => {
+      return {
+        message: err.message,
+        field: err.context.label,
+      };
+    });
+    return res.status(400).json({
+      message: err,
+    });
+  }
+
+  try {
+    const [rows] = await db.query(
+      `insert into products (name, description, qty, price, discount_amount, discount_percent, net_price, status, category_id) values (:name, :description, :qty, :price, :discount_amount, :discount_percent, :net_price, :status, :category_id)`,
+      {
+        ...req.body,
+      }
+    );
+    res.json({
+      message: "insert success",
+      status: 200,
+      rows,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "insert fail",
+      rows: [],
+    });
+  }
+});
+
+app.put("/api/product", async (req, res) => {
+  const schema = joi
+    .object({
+      name: joi.string().required(),
+      description: joi.string().required(),
+      qty: joi.number().required(),
+      price: joi.number().precision(2).required(),
+      discount_amount: joi.number().precision(2).required(),
+      discount_percent: joi.number().precision(2).required(),
+      net_price: joi.number().precision(2).required(),
+      status: joi.number().required(),
+      category_id: joi.number().required(),
+      id: joi.number().required(),
+    })
+    .unknown();
+
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const err = error.details.map((err) => {
+      return {
+        message: err.message,
+        field: err.context.label,
+      };
+    });
+    return res.status(400).json({
+      message: err,
+    });
+  }
+
+  const _password = await bcrypt.hash(String(req.body.password), 10);
+
+  try {
+    const sql = `UPDATE products SET name = :name, description = :description, qty = :qty, price = :price, discount_amount = :discount_amount, discount_percent = :discount_percent, net_price = :net_price, status = :status, category_id = :category_id WHERE id = :id`;
+    const [data] = await db.query(sql, { ...req.body });
+    res.json({
+      message: "update success",
+      status: 200,
+      data,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "update fail",
+      data: [],
+    });
+  }
+});
+
+app.delete("/api/product", async (req, res) => {
+  try {
+    const sql = `delete from products where id = :id`;
+    const [data] = await db.query(sql, { id: req.body.id });
+    res.json({
+      message: "delete success",
+      status: 200,
+      data,
+    });
+  } catch (err) {
+    res.json({
+      message: "delete fail",
+      status: 500,
+      data: [],
+    });
+  }
+});
+
+app.get("/api/product", async (req, res) => {
+  try {
+    const [data] = await db.query("SELECT * FROM products ORDER BY id DESC");
+    res.json({
+      message: "success",
+      status: 200,
+      data,
+    });
+  } catch (err) {
+    res.json({
+      message: "Response fail",
       status: 500,
       data: [],
     });
