@@ -5,6 +5,9 @@ import SmartphoneLanding from "./lesson/V0-test/Card-v";
 import AboutUs from "./pages/about";
 import MasterLayoutWeb from "./layout/MasterLayoutWeb";
 import Home from "./pages/home/Home";
+import Dashboard from "./pages/dashboard";
+import ProductList from "./pages/dashboard/product/ProductList";
+import MasterLayoutDashboard from "./layout/MasterLayoutDashboard";
 
 function About() {
   return (
@@ -19,6 +22,10 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="/dashboard" element={<MasterLayoutDashboard />}>
+            <Route path="/dashboard/product/list" element={<ProductList />} />
+          </Route>
+
           <Route path="/" element={<MasterLayoutWeb />}>
             <Route
               index

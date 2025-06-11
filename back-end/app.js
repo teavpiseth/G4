@@ -230,17 +230,23 @@ app.post("/api/product", async (req, res) => {
   }
 
   try {
-    const [rows] = await db.query(
+    const [res] = await db.query(
       `insert into products (name, description, qty, price, discount_amount, discount_percent, net_price, status, category_id) values (:name, :description, :qty, :price, :discount_amount, :discount_percent, :net_price, :status, :category_id)`,
       {
         ...req.body,
       }
     );
-    res.json({
-      message: "insert success",
-      status: 200,
-      rows,
-    });
+    if (res.affectedRows == 1) {
+      res.json({
+        message: "insert success",
+        status: 200,
+      });
+    } else {
+      res.json({
+        message: "insert fail",
+        status: 500,
+      });
+    }
   } catch (err) {
     res.status(500).json({
       message: "insert fail",
