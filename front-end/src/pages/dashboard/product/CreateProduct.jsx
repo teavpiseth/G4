@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Form, Modal, Input, Select } from "antd";
 import axios from "axios";
 const CreateProduct = ({ modal, setModal, fetchProductList }) => {
+  const [form] = Form.useForm();
   async function onFinish(values) {
+    if (modal.isEdit) {
+      const res = await axios.put("http://localhost:3033/api/product", {
+        ...values,
+        id: form.getFieldValue("id"),
+      });
+      if (res.data) {
+        setModal({ ...modal, isEdit: false });
+        fetchProductList();
+      }
+      return;
+    }
     const res = await axios.post("http://localhost:3033/api/product", values);
     if (res.data) {
       setModal({ ...modal, isCreate: !modal.isCreate });
@@ -10,30 +22,39 @@ const CreateProduct = ({ modal, setModal, fetchProductList }) => {
     }
   }
 
+  useEffect(() => {
+    form.resetFields();
+    if (modal.isEdit) {
+      form.setFieldsValue(modal.dataRecord);
+      form.setFieldValue("id", modal.dataRecord.id);
+    }
+  }, [modal]);
+
   return (
     <>
       <Modal
         footer={null}
         centered={true}
-        title="Add Product"
+        title={modal.isEdit ? "Edit Product" : "Add Product"}
         style={{ top: 20 }}
-        open={modal.isCreate}
-        onOk={() => setModal({ ...modal, isCreate: !modal.isCreate })}
-        onCancel={() => setModal({ ...modal, isCreate: !modal.isCreate })}
+        open={modal.isCreate || modal.isEdit}
+        onOk={() =>
+          setModal({
+            ...modal,
+            isCreate: false,
+            isEdit: false,
+          })
+        }
+        onCancel={() =>
+          setModal({
+            ...modal,
+            isCreate: false,
+            isEdit: false,
+          })
+        }
       >
-        {/* 
-name
-description
-qty
-price
-discount_percent
-discount_amount
-net_price
-status
-created_at
-updated_at
-category_id */}
         <Form
+          form={form}
           layout="vertical"
           name="basic"
           labelCol={{ span: 24 }}

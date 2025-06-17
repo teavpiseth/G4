@@ -9,7 +9,9 @@ const ProductList = () => {
   const [modal, setModal] = useState({
     isCreate: false,
     isDelete: false,
+    isEdit: false,
     deleteId: null,
+    dataRecord: {},
   });
   const [data, setData] = useState();
   const fetchProductList = async () => {
@@ -77,6 +79,13 @@ const ProductList = () => {
             className="mr-2 text-red-500"
           />
           <EditOutlined
+            onClick={() =>
+              setModal({
+                ...modal,
+                isEdit: !modal.isEdit,
+                dataRecord: record,
+              })
+            }
             style={{ cursor: "pointer", fontSize: "16px" }}
             className="text-blue-500"
           />
