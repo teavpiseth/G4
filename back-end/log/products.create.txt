@@ -1,0 +1,1 @@
+2025-06-19T14:21:20.919Z error: Error: Column 'name' cannot be null 

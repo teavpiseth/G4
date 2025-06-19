@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 11, 2025 at 04:53 PM
+-- Generation Time: Jun 19, 2025 at 04:28 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -95,8 +95,12 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`id`, `name`, `description`, `qty`, `price`, `discount_percent`, `discount_amount`, `net_price`, `status`, `created_at`, `updated_at`, `category_id`) VALUES
 (2, 'Headphones', 'High-quality noise-canceling over-ear headphones', 150, 120, 10, 12, 108, 1, '2025-06-09 14:04:09', '2025-06-09 14:10:47', 3),
 (4, 'Iphone 16', 'High-quality noise-canceling over-ear headphones', 10, 1000, 0, 0, 1000, 1, '2025-06-09 14:30:51', '2025-06-09 14:30:51', 3),
-(5, 'Macbook ', 'High-quality noise-canceling over-ear headphones', 3, 2000, 0, 0, 1000, 0, '2025-06-10 14:27:42', '2025-06-10 14:36:02', 3),
-(7, 'Mac book 220', 'color red', 3, 1000, 10, 100, 900, 1, '2025-06-11 14:17:12', '2025-06-11 14:17:12', 1);
+(5, 'Macbook ', 'High-quality noise-canceling over-ear headphones', 3, 2000, 0, 0, 1000, 1, '2025-06-10 14:27:42', '2025-06-12 13:59:14', 3),
+(7, 'Mac book 222', 'color red', 3, 1000, 10, 100, 900, 1, '2025-06-11 14:17:12', '2025-06-12 13:58:30', 1),
+(9, 'Macbook M3', 'High-quality noise-canceling over-ear headphones', 3, 2000, 0, 0, 1000, 1, '2025-06-17 14:09:56', '2025-06-17 14:09:56', 3),
+(10, 'Ipad', 'High-quality noise-canceling over-ear headphones', 3, 2000, 0, 0, 1000, 0, '2025-06-17 14:10:31', '2025-06-17 14:29:36', 3),
+(11, 'Macbook M4', 'High-quality noise-canceling over-ear headphones', 3, 2000, 0, 0, 1000, 1, '2025-06-17 14:19:37', '2025-06-17 14:19:37', 3),
+(13, 'Iphone 16', 'High-quality noise-canceling over-ear headphones', 3, 2000, 0, 0, 1000, 0, '2025-06-19 13:56:08', '2025-06-19 13:58:20', 4);
 
 -- --------------------------------------------------------
 
@@ -163,7 +167,7 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `product_image`

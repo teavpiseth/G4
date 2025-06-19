@@ -1,32 +1,15 @@
 const joi = require("joi");
 const db = require("../../database/db");
 const ProductModel = require("./product.model");
+const productValidate = require("./product.validate");
 
 const create = async (req, res) => {
-  const schema = joi
-    .object({
-      name: joi.string().required(),
-      description: joi.string().required(),
-      qty: joi.number().required(),
-      price: joi.number().precision(2).required(),
-      discount_amount: joi.number().precision(2).required(),
-      discount_percent: joi.number().precision(2).required(),
-      net_price: joi.number().precision(2).required(),
-      status: joi.number().required(),
-      category_id: joi.number().required(),
-    })
-    .unknown();
+  const validate = await productValidate.create(req, res);
 
-  const { error } = schema.validate(req.body, { abortEarly: false });
-  if (error) {
-    const err = error.details.map((err) => {
-      return {
-        message: err.message,
-        field: err.context.label,
-      };
-    });
+  if (validate.result == false) {
     return res.status(400).json({
-      message: err,
+      data: validate.errors,
+      message: "fail",
     });
   }
 
@@ -63,36 +46,17 @@ const get = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const schema = joi
-    .object({
-      name: joi.string().required(),
-      description: joi.string().required(),
-      qty: joi.number().required(),
-      price: joi.number().precision(2).required(),
-      discount_amount: joi.number().precision(2).required(),
-      discount_percent: joi.number().precision(2).required(),
-      net_price: joi.number().precision(2).required(),
-      status: joi.number().required(),
-      category_id: joi.number().required(),
-      id: joi.number().required(),
-    })
-    .unknown();
+  const validate = await productValidate.update(req, res);
 
-  const { error } = schema.validate(req.body, { abortEarly: false });
-  if (error) {
-    const err = error.details.map((err) => {
-      return {
-        message: err.message,
-        field: err.context.label,
-      };
-    });
+  if (validate.result == false) {
     return res.status(400).json({
-      message: err,
+      data: validate.errors,
+      message: "fail",
     });
   }
-
+  console.log("after validate ");
   const result = await ProductModel.update(req, res);
-
+  console.log("after update sql");
   if (result?.affectedRows == 1) {
     res.json({
       message: "update success",
