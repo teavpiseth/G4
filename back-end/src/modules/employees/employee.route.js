@@ -18,6 +18,7 @@ router.post("/api/employees", async (req, res) => {
     req.body;
   const schema = joi
     .object({
+      tel: joi.string().required(),
       first_name: joi.string().required(),
       last_name: joi.string().required(),
       email: joi.string().email().required().messages({
@@ -47,7 +48,7 @@ router.post("/api/employees", async (req, res) => {
   try {
     const _password = bcrypt.hashSync(req.body.password, 10);
     const [rows] = await db.query(
-      `insert into employees (first_name, last_name, email, image, gender, dob, password) values ( ${mysql.escape(
+      `insert into employees (first_name, last_name, email, image, gender, dob, password, tel) values ( ${mysql.escape(
         first_name
       )},
       ${mysql.escape(last_name)},
@@ -55,7 +56,8 @@ router.post("/api/employees", async (req, res) => {
       ${mysql.escape(image)},
       ${mysql.escape(gender)},
       ${mysql.escape(dob)},
-      ${mysql.escape(_password)})`
+      ${mysql.escape(_password)},
+      ${mysql.escape(req.body.tel)})`
     );
     res.json({
       message: "insert success",
@@ -76,6 +78,7 @@ router.put("/api/employees", async (req, res) => {
 
   const schema = joi
     .object({
+      tel: joi.string().required(),
       first_name: joi.string().required(),
       last_name: joi.string().required(),
       email: joi.string().email().required().messages({
@@ -121,7 +124,7 @@ router.put("/api/employees", async (req, res) => {
       gender
     )}, dob = ${mysql.escape(dob)}, password = ${mysql.escape(
       _password
-    )}   WHERE id = ${mysql.escape(id)}`;
+    )}, tel = ${mysql.escape(req.body.tel)}   WHERE id = ${mysql.escape(id)}`;
     console.log(sql);
     const [data] = await db.query(sql);
     res.json({

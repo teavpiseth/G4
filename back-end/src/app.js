@@ -4,11 +4,13 @@ const path = require("path");
 const cors = require("cors");
 const productRoute = require("./modules/products/product.route");
 const employeesRoute = require("./modules/employees/employee.route");
+const authenticationRoute = require("./modules/authentication/authentication.route");
 
 app.use(cors());
 app.use(express.json()); // parse application/json
 app.use(express.urlencoded({ extended: true })); // for from data
 
+app.use(authenticationRoute);
 app.use(productRoute);
 app.use(employeesRoute);
 app.get("/home", (req, res) => {
