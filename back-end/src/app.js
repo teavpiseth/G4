@@ -5,6 +5,7 @@ const cors = require("cors");
 const productRoute = require("./modules/products/product.route");
 const employeesRoute = require("./modules/employees/employee.route");
 const authenticationRoute = require("./modules/authentication/authentication.route");
+require("dotenv").config();
 
 app.use(cors());
 app.use(express.json()); // parse application/json

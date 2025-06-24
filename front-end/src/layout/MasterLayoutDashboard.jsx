@@ -1,20 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  LoginOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
+import LocalStorage from "../utils/Localstorage";
 const { Header, Sider, Content } = Layout;
 const MasterLayoutDashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  useEffect(() => {
+    //did mount
+    const token = LocalStorage.getAssessToken();
+    if (!token) {
+      navigate("/dashboard/login");
+    } else {
+      setIsLogin(true);
+    }
+  }, []);
+  if (isLogin == false) return <></>;
   return (
     <div className="w-full">
       <Layout className="w-full h-screen">
@@ -58,6 +72,15 @@ const MasterLayoutDashboard = () => {
                 key: "3",
                 icon: <UploadOutlined />,
                 label: "nav 3",
+              },
+              {
+                key: "4",
+                icon: <LoginOutlined />,
+                label: "Log out",
+                onClick: () => {
+                  navigate("/dashboard/login");
+                  LocalStorage.removeAssessToken();
+                },
               },
             ]}
           />

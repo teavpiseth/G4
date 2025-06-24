@@ -20,7 +20,7 @@ const login = async (req, res) => {
       accessToken: _result.accessToken,
     });
   } else {
-    res.json({
+    res.status(400).json({
       ..._result,
     });
   }

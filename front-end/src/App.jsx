@@ -9,6 +9,7 @@ import Dashboard from "./pages/dashboard";
 import ProductList from "./pages/dashboard/product/ProductList";
 import MasterLayoutDashboard from "./layout/MasterLayoutDashboard";
 import Login from "./pages/dashboard/login";
+import PrivatePage from "./components/privatepage/PrivatePage";
 
 function About() {
   return (
@@ -25,7 +26,10 @@ function App() {
         <Routes>
           <Route path="/dashboard/login" element={<Login />} />
           <Route path="/dashboard" element={<MasterLayoutDashboard />}>
-            <Route path="/dashboard/product/list" element={<ProductList />} />
+            <Route
+              path="/dashboard/product/list"
+              element={<PrivatePage component={<ProductList />} />}
+            />
           </Route>
 
           <Route path="/" element={<MasterLayoutWeb />}>
