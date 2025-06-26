@@ -2,6 +2,7 @@ const joi = require("joi");
 const db = require("../../database/db");
 const AuthModel = require("./authentication.model");
 const productValidate = require("./authentication.validate");
+const { successResponse, errorResponse } = require("../../helper/response");
 
 const login = async (req, res) => {
   const validate = await productValidate.login(req, res);
@@ -14,15 +15,9 @@ const login = async (req, res) => {
   }
   const _result = await AuthModel.login(req, res);
   if (_result.result) {
-    res.json({
-      message: "Response success",
-      status: 200,
-      accessToken: _result.accessToken,
-    });
+    res.json(successResponse(_result.data));
   } else {
-    res.status(400).json({
-      ..._result,
-    });
+    res.status(500).json(errorResponse(_result.message));
   }
 };
 

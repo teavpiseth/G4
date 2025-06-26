@@ -1,27 +1,34 @@
 import React from "react";
-import { Button, Checkbox, Form, Input, message } from "antd";
-import axios from "axios";
+import { Button, Form, Input, notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import LocalStorage from "../../../utils/Localstorage";
+import HttpRequest from "../../../services/HttpRequest";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const [api, contextHolder] = notification.useNotification();
   const onFinish = async (values) => {
-    try {
-      const res = await axios.post("http://localhost:3033/api/login", values);
-      if (res.data) {
-        LocalStorage.setAssessToken(res.data.accessToken);
-        navigate("/dashboard");
-      }
-    } catch (error) {
-      console.log(error.response.data.message);
-      message.info(error.response.data.message);
+    const res = await HttpRequest.post(
+      "http://localhost:3033/api/login",
+      values
+    );
+    if (res.data) {
+      LocalStorage.setAssessToken(res.data.accessToken);
+      navigate("/dashboard");
+    } else {
+      api.error({
+        message: "Error",
+        description: res.message,
+        style: {
+          width: 600,
+        },
+      });
     }
   };
 
   return (
     <>
+      {contextHolder}
       <img
         className="w-[150px] m-auto"
         src="https://static.vecteezy.com/system/resources/previews/047/656/219/non_2x/abstract-logo-design-for-any-corporate-brand-business-company-vector.jpg"

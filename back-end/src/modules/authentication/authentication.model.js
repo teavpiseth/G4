@@ -7,14 +7,12 @@ const { getSecretKeyJWT } = require("../../helper/const");
 
 const login = async (req, res) => {
   try {
-    const checkTelSql = `select * from employeessdfsdf where tel = :tel`;
+    const checkTelSql = `select * from employeessdf where tel = :tel`;
     const [resultCheckTel] = await db.query(checkTelSql, { ...req.body });
     if (resultCheckTel?.[0]?.length === 0) {
       return {
         result: false,
-        errors: {
-          message: "User or password not correct",
-        },
+        message: "User or password not correct",
       };
     }
     // 12345
@@ -32,20 +30,17 @@ const login = async (req, res) => {
       });
       return {
         result: true,
-        accessToken,
+        data: { accessToken },
       };
     } else {
       return {
         result: false,
-        errors: {
-          message: "User or password not correct",
-          field: "password",
-        },
+        message: "User or password not correct",
       };
     }
   } catch (err) {
     logger.logError({ name: `${table}.login`, message: err });
-    return err;
+    return { result: false, message: "Internal server error" };
   }
 };
 
