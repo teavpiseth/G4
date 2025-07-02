@@ -5,6 +5,7 @@ const cors = require("cors");
 const productRoute = require("./modules/products/product.route");
 const employeesRoute = require("./modules/employees/employee.route");
 const authenticationRoute = require("./modules/authentication/authentication.route");
+const authorization = require("./middleware/authorization");
 require("dotenv").config();
 
 app.use(cors());
@@ -12,6 +13,9 @@ app.use(express.json()); // parse application/json
 app.use(express.urlencoded({ extended: true })); // for from data
 
 app.use(authenticationRoute);
+
+app.use(authorization);
+
 app.use(productRoute);
 app.use(employeesRoute);
 app.get("/home", (req, res) => {

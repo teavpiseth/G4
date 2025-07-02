@@ -30,7 +30,7 @@ const create = async (req, res) => {
 
 const get = async (req, res) => {
   const result = await ProductModel.get(req, res);
-  if (result?.length > 0) {
+  if (result.status == "success") {
     res.json({
       message: "Response success",
       status: 200,

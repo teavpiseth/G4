@@ -7,7 +7,7 @@ const { getSecretKeyJWT } = require("../../helper/const");
 
 const login = async (req, res) => {
   try {
-    const checkTelSql = `select * from employeessdf where tel = :tel`;
+    const checkTelSql = `select * from employees where tel = :tel`;
     const [resultCheckTel] = await db.query(checkTelSql, { ...req.body });
     if (resultCheckTel?.[0]?.length === 0) {
       return {
@@ -25,12 +25,16 @@ const login = async (req, res) => {
         user: resultCheckTel[0].tel,
         id: resultCheckTel[0].id,
       };
+
       const accessToken = jwt.sign(payload, getSecretKeyJWT(), {
-        expiresIn: "10d",
+        expiresIn: "10m",
+      });
+      const refreshToken = jwt.sign(payload, getSecretKeyJWT(), {
+        expiresIn: "1d",
       });
       return {
         result: true,
-        data: { accessToken },
+        data: { accessToken, refreshToken },
       };
     } else {
       return {

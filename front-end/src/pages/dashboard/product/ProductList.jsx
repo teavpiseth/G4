@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Button, Space, Table, Tag } from "antd";
+import React, { use, useEffect, useRef, useState } from "react";
+import { Button, Input, Table, Tag } from "antd";
 import axios from "axios";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import CreateProduct from "./CreateProduct";
 import DeleteProduct from "./DeleteProduct";
+import HttpRequest from "../../../services/HttpRequest";
+import Localstorage from "../../../utils/Localstorage";
+import useDebounce from "../../../utils/debounce";
 
 const ProductList = () => {
   const [modal, setModal] = useState({
@@ -14,9 +17,19 @@ const ProductList = () => {
     dataRecord: {},
   });
   const [data, setData] = useState();
+  const [debounce] = useDebounce();
+  const pagination = useRef({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
+  const search = useRef("");
   const fetchProductList = async () => {
-    const res = await axios.get("http://localhost:3033/api/product");
-    setData(res.data.data);
+    const api = `http://localhost:3033/api/product?page=${pagination.current.current}&limit=${pagination.current.pageSize}&search=${search.current}`;
+    const res = await HttpRequest.get(api);
+    const data = res.data.data;
+    setData(data.list);
+    pagination.current.total = data.total;
   };
 
   const columns = [
@@ -100,7 +113,17 @@ const ProductList = () => {
   }, []);
   return (
     <>
-      <div className="text-right">
+      <div className="flex justify-between">
+        <Input
+          onChange={(e) => {
+            debounce(() => {
+              search.current = e.target.value;
+              fetchProductList();
+            }, 500);
+          }}
+          placeholder="Search"
+          style={{ width: 200 }}
+        />
         <Button
           type="primary"
           onClick={() => setModal({ ...modal, isCreate: !modal.isCreate })}
@@ -108,7 +131,20 @@ const ProductList = () => {
           Add Product
         </Button>
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={{
+          total: pagination.current.total,
+          pageSize: pagination.current.pageSize,
+          current: pagination.current.current,
+        }}
+        onChange={(pagin) => {
+          pagination.current.current = pagin.current;
+          pagination.current.pageSize = pagin.pageSize;
+          fetchProductList();
+        }}
+      />
       <CreateProduct
         modal={modal}
         setModal={setModal}

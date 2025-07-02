@@ -17,4 +17,20 @@ const login = async (req, res) => {
   return { result: true, errors: null };
 };
 
-module.exports = { login };
+const refreshToken = async (req, res) => {
+  const schema = joi
+    .object({
+      refreshToken: joi.string().required(),
+    })
+    .unknown();
+
+  const { error } = schema.validate(req.body, { abortEarly: false });
+
+  if (error) {
+    return { result: false, errors: handleErrorDetail(error) };
+  }
+
+  return { result: true, errors: null };
+};
+
+module.exports = { login, refreshToken };

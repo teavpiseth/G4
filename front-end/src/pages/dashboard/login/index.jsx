@@ -13,7 +13,9 @@ const Login = () => {
       values
     );
     if (res.data) {
-      LocalStorage.setAssessToken(res.data.accessToken);
+      console.log(res.data.data.accessToken);
+      LocalStorage.setAssessToken(res.data.data.accessToken);
+      LocalStorage.setRefreshToken(res.data.data.refreshToken);
       navigate("/dashboard");
     } else {
       api.error({

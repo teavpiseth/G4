@@ -20,8 +20,25 @@ const create = async (req, res) => {
 
 const get = async (req, res) => {
   try {
-    const [data] = await db.query("SELECT * FROM products ORDER BY id DESC");
-    return data;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+
+    const offset = (page - 1) * limit;
+
+    const [data] = await db.query(
+      "SELECT * FROM products where name like :search ORDER BY id DESC limit :limit offset :offset",
+      {
+        search: `%${search}%`,
+        limit,
+        offset,
+      }
+    );
+
+    const sqlTotal = `select count(*) as total from products`;
+    const [total] = await db.query(sqlTotal);
+
+    return { status: "success", list: data, total: total[0].total };
   } catch (err) {
     logger.logError({ name: `${table}.get`, message: err });
     return err;

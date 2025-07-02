@@ -4,7 +4,8 @@ const successResponse = (data, message = "Success") => {
     statusCode: 200,
     message,
     data,
-    // timestamp: Date.now(),
+    errorCode: 0, // optional: for frontend handling
+    errors: [], // optional: validation or details
   };
 };
 
@@ -13,7 +14,6 @@ const errorResponse = (message = "Error", statusCode = 500) => {
     status: "error",
     statusCode,
     message,
-    // timestamp: Date.now(),
   };
 };
 

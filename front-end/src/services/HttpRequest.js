@@ -7,12 +7,13 @@ class HttpRequest {
         method,
         url,
         data,
-        header: {
+        headers: {
           Authorization: `Bearer ${LocalStorage.getAssessToken()}`,
           ...extraHeaders,
         },
         ...extraConfig,
       };
+
       const response = await axios(requestOption);
 
       return response;
