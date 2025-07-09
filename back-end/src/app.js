@@ -5,6 +5,7 @@ const cors = require("cors");
 const productRoute = require("./modules/products/product.route");
 const employeesRoute = require("./modules/employees/employee.route");
 const authenticationRoute = require("./modules/authentication/authentication.route");
+const categoryRoute = require("./modules/category/category.route");
 const authorization = require("./middleware/authorization");
 require("dotenv").config();
 
@@ -18,6 +19,7 @@ app.use(authorization);
 
 app.use(productRoute);
 app.use(employeesRoute);
+app.use(categoryRoute);
 app.get("/home", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });

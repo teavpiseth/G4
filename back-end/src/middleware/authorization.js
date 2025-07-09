@@ -9,7 +9,6 @@ function authorization(req, res, next) {
   if (req.headers?.authorization) {
     const token = getAssessToken(req.headers.authorization);
     try {
-      // console.log(token, getSecretKeyJWT());
       const result = jwt.verify(token, getSecretKeyJWT());
       if (result) {
         next();

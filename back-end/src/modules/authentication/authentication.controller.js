@@ -37,27 +37,30 @@ const refreshToken = async (req, res) => {
       message: "fail",
     });
   }
-  const result = jwt.verify(req.body.refreshToken, getSecretKeyJWT());
-
-  if (result) {
-    const payload = {
-      user: result.user,
-      id: result.id,
-    };
-    const newAccessToken = jwt.sign(payload, getSecretKeyJWT(), {
-      expiresIn: "10m",
-    });
-    const newRefreshToken = jwt.sign(payload, getSecretKeyJWT(), {
-      expiresIn: "1d",
-    });
-    return res.status(200).json({
-      data: {
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
-      },
-      message: "success",
-    });
-  } else {
+  try {
+    const result = jwt.verify(req.body.refreshToken, getSecretKeyJWT());
+    if (result) {
+      const payload = {
+        user: result.user,
+        id: result.id,
+      };
+      const newAccessToken = jwt.sign(payload, getSecretKeyJWT(), {
+        expiresIn: "10m",
+      });
+      const newRefreshToken = jwt.sign(payload, getSecretKeyJWT(), {
+        expiresIn: "1d",
+      });
+      return res.status(200).json({
+        data: {
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken,
+        },
+        message: "success",
+      });
+    } else {
+      return res.status(401).json(errorResponse("unauthorized", 401));
+    }
+  } catch (err) {
     return res.status(401).json(errorResponse("unauthorized", 401));
   }
 };
