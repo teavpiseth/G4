@@ -1,4 +1,7 @@
 class LocalStorage {
+  clear() {
+    localStorage.clear();
+  }
   setAssessToken(token) {
     localStorage.setItem("accessToken", token);
   }

@@ -10,6 +10,7 @@ import ProductList from "./pages/dashboard/product/ProductList";
 import MasterLayoutDashboard from "./layout/MasterLayoutDashboard";
 import Login from "./pages/dashboard/login";
 import PrivatePage from "./components/privatepage/PrivatePage";
+import CategoryList from "./pages/dashboard/category/CategoryList";
 
 function About() {
   return (
@@ -29,6 +30,10 @@ function App() {
             <Route
               path="/dashboard/product/list"
               element={<PrivatePage component={<ProductList />} />}
+            />
+            <Route
+              path="/dashboard/category"
+              element={<PrivatePage component={<CategoryList />} />}
             />
           </Route>
 

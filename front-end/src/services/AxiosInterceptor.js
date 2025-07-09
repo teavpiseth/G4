@@ -1,6 +1,7 @@
 import axios from "axios";
 import HttpRequest from "./HttpRequest";
 import LocalStorage from "../utils/Localstorage";
+import { SERVER_URL } from "../const";
 
 axios.interceptors.request.use(
   function (config) {
@@ -26,12 +27,18 @@ axios.interceptors.response.use(
       !config?._isRetry
     ) {
       config._isRetry = true;
-      await HttpRequest.post("http://localhost:3033/api/refresh-token", {
+      await HttpRequest.post(SERVER_URL + "/api/refresh-token", {
         refreshToken: LocalStorage.getRefreshToken(),
-      }).then((res) => {
-        LocalStorage.setAssessToken(res.data.data.accessToken);
-        LocalStorage.setRefreshToken(res.data.data.refreshToken);
-      });
+      })
+        .then((res) => {
+          LocalStorage.setAssessToken(res.data.data.accessToken);
+          LocalStorage.setRefreshToken(res.data.data.refreshToken);
+        })
+        .catch(() => {
+          LocalStorage.clear();
+          window.location.href = "/login";
+          window.location.reload();
+        });
 
       config.headers.Authorization = `Bearer ${LocalStorage.getAssessToken()}`;
       const response = await axios(config);

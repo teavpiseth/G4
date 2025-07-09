@@ -3,17 +3,14 @@ import { Button, Form, Input, notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import LocalStorage from "../../../utils/Localstorage";
 import HttpRequest from "../../../services/HttpRequest";
+import { SERVER_URL } from "../../../const/index";
 
 const Login = () => {
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
   const onFinish = async (values) => {
-    const res = await HttpRequest.post(
-      "http://localhost:3033/api/login",
-      values
-    );
+    const res = await HttpRequest.post(SERVER_URL + "/api/login", values);
     if (res.data) {
-      console.log(res.data.data.accessToken);
       LocalStorage.setAssessToken(res.data.data.accessToken);
       LocalStorage.setRefreshToken(res.data.data.refreshToken);
       navigate("/dashboard");

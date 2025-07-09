@@ -66,6 +66,14 @@ const MasterLayoutDashboard = () => {
                       navigate("/dashboard/product/list");
                     },
                   },
+                  {
+                    key: "category",
+                    label: "Category",
+                    icon: <UserOutlined />,
+                    onClick: () => {
+                      navigate("/dashboard/category");
+                    },
+                  },
                 ],
               },
               {

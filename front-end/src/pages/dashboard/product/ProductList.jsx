@@ -7,6 +7,7 @@ import DeleteProduct from "./DeleteProduct";
 import HttpRequest from "../../../services/HttpRequest";
 import Localstorage from "../../../utils/Localstorage";
 import useDebounce from "../../../utils/debounce";
+import { SERVER_URL } from "../../../const";
 
 const ProductList = () => {
   const [modal, setModal] = useState({
@@ -19,13 +20,15 @@ const ProductList = () => {
   const [data, setData] = useState();
   const [debounce] = useDebounce();
   const pagination = useRef({
+    // no rerender. get and set with current
     current: 1,
     pageSize: 10,
     total: 0,
   });
+
   const search = useRef("");
   const fetchProductList = async () => {
-    const api = `http://localhost:3033/api/product?page=${pagination.current.current}&limit=${pagination.current.pageSize}&search=${search.current}`;
+    const api = `${SERVER_URL}/api/product?page=${pagination.current.current}&limit=${pagination.current.pageSize}&search=${search.current}`;
     const res = await HttpRequest.get(api);
     const data = res.data.data;
     setData(data.list);
@@ -139,9 +142,9 @@ const ProductList = () => {
           pageSize: pagination.current.pageSize,
           current: pagination.current.current,
         }}
-        onChange={(pagin) => {
-          pagination.current.current = pagin.current;
-          pagination.current.pageSize = pagin.pageSize;
+        onChange={(paginate) => {
+          pagination.current.current = paginate.current;
+          pagination.current.pageSize = paginate.pageSize;
           fetchProductList();
         }}
       />

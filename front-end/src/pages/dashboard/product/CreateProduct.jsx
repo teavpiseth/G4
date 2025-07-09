@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { Button, Form, Modal, Input, Select } from "antd";
 import axios from "axios";
+import { SERVER_URL } from "../../../const";
 const CreateProduct = ({ modal, setModal, fetchProductList }) => {
   const [form] = Form.useForm();
   async function onFinish(values) {
     if (modal.isEdit) {
-      const res = await axios.put("http://localhost:3033/api/product", {
+      const res = await axios.put(SERVER_URL + "/api/product", {
         ...values,
         id: form.getFieldValue("id"),
       });
@@ -15,7 +16,7 @@ const CreateProduct = ({ modal, setModal, fetchProductList }) => {
       }
       return;
     }
-    const res = await axios.post("http://localhost:3033/api/product", values);
+    const res = await axios.post(SERVER_URL + "/api/product", values);
     if (res.data) {
       setModal({ ...modal, isCreate: !modal.isCreate });
       fetchProductList();

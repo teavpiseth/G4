@@ -3,7 +3,7 @@ import { Button, Form, Modal, Input, Select } from "antd";
 import axios from "axios";
 import { SERVER_URL } from "../../../const";
 
-const DeleteProduct = ({ modal, setModal, fetchProductList }) => {
+const DeleteCategory = ({ modal, setModal, fetchProductList }) => {
   async function handleDelete() {
     const res = await axios.delete(SERVER_URL + "/api/product", {
       data: { id: modal.deleteId }, // 👈 must be inside `data`
@@ -28,4 +28,4 @@ const DeleteProduct = ({ modal, setModal, fetchProductList }) => {
     </>
   );
 };
-export default DeleteProduct;
+export default DeleteCategory;

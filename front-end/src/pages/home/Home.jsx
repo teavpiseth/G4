@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import Product from "../../components/Product";
 import { Row, Col } from "antd";
 import axios from "axios";
+import { SERVER_URL } from "../../const";
 export default function Home() {
   const [dataPost, setDataPost] = React.useState([]);
 
   async function fetchData() {
-    const res = await axios.get("http://localhost:3033/api/list"); // 10 sec // 20 sec
+    const res = await axios.get(SERVER_URL + "/api/list"); // 10 sec // 20 sec
     setDataPost(res?.data?.rows);
   }
 
