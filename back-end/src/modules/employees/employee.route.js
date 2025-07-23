@@ -125,7 +125,7 @@ router.put("/api/employees", async (req, res) => {
     )}, dob = ${mysql.escape(dob)}, password = ${mysql.escape(
       _password
     )}, tel = ${mysql.escape(req.body.tel)}   WHERE id = ${mysql.escape(id)}`;
-    console.log(sql);
+
     const [data] = await db.query(sql);
     res.json({
       message: "update success",

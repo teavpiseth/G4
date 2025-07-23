@@ -37,7 +37,7 @@ axios.interceptors.response.use(
         .catch(() => {
           LocalStorage.clear();
           window.location.href = "/login";
-          window.location.reload();
+          // window.location.reload();
         });
 
       config.headers.Authorization = `Bearer ${LocalStorage.getAssessToken()}`;

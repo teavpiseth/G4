@@ -15,6 +15,8 @@ app.use(express.urlencoded({ extended: true })); // for from data
 
 app.use(authenticationRoute);
 
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
 app.use(authorization);
 
 app.use(productRoute);
@@ -26,6 +28,10 @@ app.get("/home", (req, res) => {
 
 app.get("/send-message", (req, res) => {
   res.sendFile(path.join(__dirname, "public/send", "send-message.html"));
+});
+
+app.use((err, req, res, next) => {
+  return res.status(400).json({ error: err.message });
 });
 
 app.listen(3033, () => {

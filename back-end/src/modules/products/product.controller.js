@@ -86,9 +86,38 @@ const remove = async (req, res) => {
   }
 };
 
+const saveImages = async (req, res) => {
+  req.body.images = req?.files.map((file) => {
+    return file.path;
+  });
+  const validate = await productValidate.saveImages(req, res);
+
+  if (validate.result == false) {
+    return res.status(400).json({
+      data: validate.errors,
+      message: "fail",
+    });
+  }
+
+  const result = await ProductModel.saveImages(req, res);
+
+  if (result?.affectedRows >= 1) {
+    res.json({
+      message: "insert success",
+      status: 200,
+    });
+  } else {
+    res.json({
+      message: "insert fail",
+      status: 500,
+    });
+  }
+};
+
 module.exports = {
   create,
   get,
   update,
   remove,
+  saveImages,
 };

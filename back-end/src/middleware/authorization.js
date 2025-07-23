@@ -6,6 +6,9 @@ function getAssessToken(authorization) {
   return authorization.split(" ")[1];
 }
 function authorization(req, res, next) {
+  if (req.url.includes("/web-site/")) {
+    return next();
+  }
   if (req.headers?.authorization) {
     const token = getAssessToken(req.headers.authorization);
     try {

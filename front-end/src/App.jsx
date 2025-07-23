@@ -11,6 +11,7 @@ import MasterLayoutDashboard from "./layout/MasterLayoutDashboard";
 import Login from "./pages/dashboard/login";
 import PrivatePage from "./components/privatepage/PrivatePage";
 import CategoryList from "./pages/dashboard/category/CategoryList";
+import DetailProduct from "./pages/detail";
 
 function About() {
   return (
@@ -46,6 +47,8 @@ function App() {
                 </>
               }
             />
+            <Route path="/product/:id" element={<DetailProduct />} />
+
             <Route
               path="/about"
               element={

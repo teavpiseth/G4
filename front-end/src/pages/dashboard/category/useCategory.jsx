@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import useDebounce from "../../../utils/debounce";
 import HttpRequest from "../../../services/HttpRequest";
 import { SERVER_URL } from "../../../const";
-import { Tag } from "antd";
+import { Tag, Image } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 const useCategory = () => {
   const [modal, setModal] = useState({
@@ -38,6 +38,12 @@ const useCategory = () => {
     setListAll(data.list);
   };
 
+  const handleImageError = (event) => {
+    event.target.onerror = null; // prevent infinite loop
+    event.target.src =
+      "https://www.fivebranches.edu/wp-content/uploads/2021/08/default-image.jpg";
+  };
+
   const columns = [
     {
       title: "Name",
@@ -47,6 +53,19 @@ const useCategory = () => {
     {
       title: "Description",
       dataIndex: "description",
+    },
+    {
+      title: "Image",
+      dataIndex: "image",
+      render: (text) => {
+        return (
+          <Image
+            width={200}
+            onError={handleImageError}
+            src={SERVER_URL + "/" + text}
+          />
+        );
+      },
     },
     {
       title: "Parent",

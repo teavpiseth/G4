@@ -2,7 +2,13 @@ import React, { useEffect } from "react";
 import { Button, Form, Modal, Input, Select } from "antd";
 import axios from "axios";
 import { SERVER_URL } from "../../../const";
-const CreateProduct = ({ modal, setModal, fetchProductList }) => {
+import MultiImageUploader from "./ImageUploader";
+const CreateProduct = ({
+  modal,
+  setModal,
+  fetchProductList,
+  listAllCategory,
+}) => {
   const [form] = Form.useForm();
   async function onFinish(values) {
     if (modal.isEdit) {
@@ -81,7 +87,7 @@ const CreateProduct = ({ modal, setModal, fetchProductList }) => {
               { required: true, message: "Please input your description!" },
             ]}
           >
-            <Input type="text" />
+            <Input.TextArea rows={4} type="text" />
           </Form.Item>
 
           <Form.Item
@@ -179,7 +185,17 @@ const CreateProduct = ({ modal, setModal, fetchProductList }) => {
             name="category_id"
             rules={[{ required: true, message: "Please input your category!" }]}
           >
-            <Input type="text" />
+            <Select
+              showSearch
+              filterOption={(input, option) =>
+                option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              placeholder="Select a category"
+              options={listAllCategory.map((item) => ({
+                value: item.id,
+                label: item.name,
+              }))}
+            />
           </Form.Item>
 
           <Form.Item
@@ -190,11 +206,19 @@ const CreateProduct = ({ modal, setModal, fetchProductList }) => {
             <Select
               placeholder="Select a category"
               options={[
-                { value: "0", label: "Inactive" },
-                { value: "1", label: "Active" },
+                { value: 0, label: "Inactive" },
+                { value: 1, label: "Active" },
               ]}
             />
           </Form.Item>
+
+          {/* <Form.Item
+            label="Image"
+            name="images"
+            rules={[{ required: true, message: "Please input your image!" }]}
+          >
+            <MultiImageUploader form={form} />
+          </Form.Item> */}
 
           <Form.Item className="text-right" label={null}>
             <Button type="primary" htmlType="submit">

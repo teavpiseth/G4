@@ -5,8 +5,8 @@ const table = "category";
 
 const create = async (req, res) => {
   try {
-    const sql = `insert into ${table} (name, description, slug, status,  parent_id) values (:name, :description, :slug, :status, :parent_id)`;
-    console.log(sql, req.body);
+    const sql = `insert into ${table} (name, description, slug, status,  parent_id, image) values (:name, :description, :slug, :status, :parent_id, :image)`;
+
     const [result] = await db.query(sql, {
       ...req.body,
     });
@@ -56,7 +56,7 @@ const get = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const sql = `UPDATE ${table} SET name = :name, description = :description, slug = :slug, status = :status, parent_id = :parent_id WHERE id = :id`;
+    const sql = `UPDATE ${table} SET name = :name, description = :description, slug = :slug, status = :status, parent_id = :parent_id , image = :image WHERE id = :id`;
     const [data] = await db.query(sql, { ...req.body });
     return data;
   } catch (err) {

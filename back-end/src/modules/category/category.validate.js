@@ -13,6 +13,7 @@ const create = async (req, res) => {
         .alternatives()
         .try(joi.string(), joi.number(), joi.valid(null))
         .required(),
+      image: joi.string().required(),
     })
     .unknown();
 
@@ -32,10 +33,11 @@ const update = async (req, res) => {
       description: joi.string().required(),
       // slug: joi.string().allow(null).required(), // null allowed
       status: joi.number().required(),
-      parent_id: joi
-        .alternatives()
-        .try(joi.string(), joi.number(), joi.valid(null))
-        .required(),
+      // parent_id: joi
+      //   .alternatives()
+      //   .try(joi.string(), joi.number(), joi.valid(null))
+      //   .required(),
+      image: joi.string().required(),
     })
     .unknown();
 

@@ -1,7 +1,11 @@
 const Model = require("./category.model");
 const Validation = require("./category.validate");
+const fs = require("fs");
+const path = require("path");
 
 const create = async (req, res) => {
+  // return res.json({ message: "test", req: req.body, file: req.file });
+  req.body.image = req.file?.path;
   const validate = await Validation.create(req, res);
 
   if (validate.result == false) {
@@ -44,6 +48,8 @@ const get = async (req, res) => {
 };
 
 const update = async (req, res) => {
+  req.body.image = req.file?.path || req.body.oldImage;
+
   const validate = await Validation.update(req, res);
 
   if (validate.result == false) {
@@ -52,9 +58,20 @@ const update = async (req, res) => {
       message: "fail",
     });
   }
-  console.log("after validate ");
+
+  if (req.file?.path) {
+    const filePath = path.join(
+      __dirname,
+      "../../../uploads",
+      req.body.oldImage
+    );
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+  }
+
   const result = await Model.update(req, res);
-  console.log("after update sql");
+
   if (result?.affectedRows == 1) {
     res.json({
       message: "update success",

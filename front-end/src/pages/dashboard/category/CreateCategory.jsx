@@ -2,14 +2,26 @@ import React, { useEffect } from "react";
 import { Button, Form, Modal, Input, Select } from "antd";
 import axios from "axios";
 import { SERVER_URL } from "../../../const";
+import ImageUploader from "./ImageUploader";
 
 const CreateCategory = ({ modal, setModal, fetchProductList, listAll }) => {
   const [form] = Form.useForm();
   async function onFinish(values) {
+    const data = new FormData();
+    for (const key in values) {
+      if (values[key]) {
+        data.append(key, values[key]);
+      }
+    }
     if (modal.isEdit) {
-      const res = await axios.put(SERVER_URL + "/api/category", {
-        ...values,
-        id: form.getFieldValue("id"),
+      data.append("id", form.getFieldValue("id"));
+      data.append("oldImage", form.getFieldValue("oldImage"));
+
+      // return;
+      const res = await axios.put(SERVER_URL + "/api/category", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       if (res.data) {
         setModal({ ...modal, isEdit: false });
@@ -17,7 +29,12 @@ const CreateCategory = ({ modal, setModal, fetchProductList, listAll }) => {
       }
       return;
     }
-    const res = await axios.post(SERVER_URL + "/api/category", values);
+
+    const res = await axios.post(SERVER_URL + "/api/category", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     if (res.data) {
       setModal({ ...modal, isCreate: !modal.isCreate });
       fetchProductList();
@@ -27,7 +44,12 @@ const CreateCategory = ({ modal, setModal, fetchProductList, listAll }) => {
   useEffect(() => {
     form.resetFields();
     if (modal.isEdit) {
-      form.setFieldsValue(modal.dataRecord);
+      for (const key in modal.dataRecord) {
+        if (modal.dataRecord[key]) {
+          form.setFieldValue(key, modal.dataRecord[key]);
+        }
+      }
+
       form.setFieldValue("id", modal.dataRecord.id);
     }
   }, [modal]);
@@ -117,6 +139,13 @@ const CreateCategory = ({ modal, setModal, fetchProductList, listAll }) => {
                 { value: 1, label: "Active" },
               ]}
             />
+          </Form.Item>
+          <Form.Item
+            label="Image"
+            name="image"
+            rules={[{ required: true, message: "Please input your image!" }]}
+          >
+            <ImageUploader form={form} />
           </Form.Item>
 
           <Form.Item className="text-right" label={null}>

@@ -3,12 +3,14 @@ import Product from "../../components/Product";
 import { Row, Col } from "antd";
 import axios from "axios";
 import { SERVER_URL } from "../../const";
+import HttpRequest from "../../services/HttpRequest";
+import CategoryList from "./components/CategoryList";
 export default function Home() {
   const [dataPost, setDataPost] = React.useState([]);
 
   async function fetchData() {
-    const res = await axios.get(SERVER_URL + "/api/list"); // 10 sec // 20 sec
-    setDataPost(res?.data?.rows);
+    // const res = await axios.get(SERVER_URL + "/api/list"); // 10 sec // 20 sec
+    // setDataPost(res?.data?.rows);
   }
 
   const handleFetch = async () => {
@@ -21,6 +23,7 @@ export default function Home() {
 
   return (
     <div>
+      <CategoryList />
       <Product />
       <h1 className="mb-5">Profile</h1>
       <Row gutter={[16, 24]} className="mb-5 text-left">
