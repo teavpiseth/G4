@@ -8,8 +8,9 @@ import {
   LoginOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import LocalStorage from "../utils/Localstorage";
+
 const { Header, Sider, Content } = Layout;
 const MasterLayoutDashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -106,6 +107,7 @@ const MasterLayoutDashboard = () => {
               }}
             />
           </Header>
+          <Link to="/">Web</Link>
           <Content
             style={{
               margin: "24px 16px",

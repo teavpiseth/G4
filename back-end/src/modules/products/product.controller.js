@@ -114,10 +114,28 @@ const saveImages = async (req, res) => {
   }
 };
 
+const getProductFromWebSite = async (req, res) => {
+  const result = await ProductModel.getProductFromWebSite(req, res);
+  if (result.status == "success") {
+    res.json({
+      message: "Response success",
+      status: 200,
+      data: result,
+    });
+  } else {
+    res.json({
+      message: "Response fail",
+      status: 500,
+      data: [],
+    });
+  }
+};
+
 module.exports = {
   create,
   get,
   update,
   remove,
   saveImages,
+  getProductFromWebSite,
 };

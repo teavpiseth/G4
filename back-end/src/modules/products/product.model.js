@@ -105,10 +105,79 @@ const saveImages = async (req, res) => {
   }
 };
 
+const getProductFromWebSite = async (req, res) => {
+  const connection = await db.getConnection();
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    const category_id = req.query.category_id || "";
+
+    const sqlCategoryList = `select * from category`;
+
+    function getAllChildIds(data, parentId) {
+      const result = [];
+
+      function recurse(currentParentId) {
+        data.forEach((item) => {
+          if (item.parent_id == currentParentId) {
+            result.push(item.id);
+            recurse(item.id); // Recursively search for this item's children
+          }
+        });
+      }
+
+      recurse(parentId);
+      return result;
+    }
+
+    let allChildIds = [];
+
+    if (category_id) {
+      const [categoryList] = await connection.query(sqlCategoryList);
+      allChildIds = getAllChildIds(categoryList, category_id);
+      allChildIds.push(category_id);
+    }
+
+    const offset = (page - 1) * limit;
+
+    const sql = `SELECT * FROM products  where name like :search and ${
+      category_id ? "category_id IN (:category_id)" : "1=1"
+    } ORDER BY id DESC limit :limit offset :offset`;
+
+    let [data] = await connection.query(sql, {
+      search: `%${search}%`,
+      limit,
+      offset,
+      category_id: allChildIds.map((id) => id.toString()),
+    });
+
+    const sqlTotal = `select count(*) as total from products`;
+    const [total] = await connection.query(sqlTotal);
+
+    let listProduct = data;
+    for (let index = 0; index < data.length; index++) {
+      const sqlImage = `select * from product_image where product_id = :product_id`;
+      const [result] = await connection.query(sqlImage, {
+        product_id: data[index].id,
+      });
+      listProduct[index].images = result;
+    }
+
+    return { status: "success", list: listProduct, total: total[0].total };
+  } catch (err) {
+    logger.logError({ name: `${table}.get`, message: err });
+    return err;
+  } finally {
+    connection.release();
+  }
+};
+
 module.exports = {
   create,
   get,
   update,
   remove,
   saveImages,
+  getProductFromWebSite,
 };

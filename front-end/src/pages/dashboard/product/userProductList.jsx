@@ -1,11 +1,16 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Tag, Image } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import useDebounce from "../../../utils/debounce";
 import HttpRequest from "../../../services/HttpRequest";
 import { SERVER_URL } from "../../../const";
+import { WebContext } from "../../../context/WebContextProvider";
 
 const useProductList = () => {
+  const {
+    listAllCategory: listAllCategoryContext,
+    setListAllCategory: setListAllCategoryContext,
+  } = useContext(WebContext);
   const [modal, setModal] = useState({
     isCreate: false,
     isDelete: false,
@@ -148,10 +153,15 @@ const useProductList = () => {
   const [listAllCategory, setListAllCategory] = useState([]);
 
   const fetchAllCategory = async () => {
+    if (listAllCategoryContext.length > 0) {
+      setListAllCategory(listAllCategoryContext);
+      return;
+    }
     const api = `${SERVER_URL}/api/category/all`;
     const res = await HttpRequest.get(api);
     const data = res.data.data;
     setListAllCategory(data.list);
+    setListAllCategoryContext(data.list);
   };
 
   function getParentCategory({ parentId }) {

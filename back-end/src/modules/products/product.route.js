@@ -13,6 +13,6 @@ router.post(
   ProductController.saveImages
 );
 
-router.get("/api/web-site/product", ProductController.get);
+router.get("/api/web-site/product", ProductController.getProductFromWebSite);
 
 module.exports = router;

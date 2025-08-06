@@ -4,7 +4,11 @@ import HttpRequest from "../../../services/HttpRequest";
 import { SERVER_URL } from "../../../const";
 import { Tag, Image } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { useContext } from "react";
+import { WebContext } from "../../../context/WebContextProvider";
 const useCategory = () => {
+  const { listAllCategory, setListAllCategory } = useContext(WebContext);
+
   const [modal, setModal] = useState({
     isCreate: false,
     isDelete: false,
@@ -32,10 +36,16 @@ const useCategory = () => {
   };
 
   const fetchAllCategory = async () => {
+    console.log({ listAllCategory });
+    if (listAllCategory.length > 0) {
+      setListAll(listAllCategory);
+      return;
+    }
     const api = `${SERVER_URL}/api/category/all`;
     const res = await HttpRequest.get(api);
     const data = res.data.data;
     setListAll(data.list);
+    setListAllCategory(data.list);
   };
 
   const handleImageError = (event) => {
